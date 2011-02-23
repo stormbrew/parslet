@@ -35,5 +35,10 @@ class Parslet::Atoms::Str < Parslet::Atoms::Base
   def to_s_inner(prec) # :nodoc:
     "'#{str}'"
   end
+  
+  def ==(other)
+    return str == other.str if other.instance_of? self.class
+    super
+  end
 end
 
