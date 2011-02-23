@@ -42,4 +42,10 @@ class Parslet::Atoms::Sequence < Parslet::Atoms::Base
     Parslet::ErrorTree.new(self).tap { |t|
       t.children << @offending_parslet.error_tree if @offending_parslet }
   end
+
+  def ==(other)
+    return parslets == other.parslets if other.instance_of?(self.class)
+    
+    super
+  end
 end

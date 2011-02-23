@@ -11,4 +11,13 @@ describe Parslet::Atoms::Re do
       match['a'].should be_a(Parslet::Atoms::Re)
     end 
   end
+  describe "comparison operators" do
+    include Parslet
+    let(:re) { match['abc'] }
+    subject { re }
+    
+    it { should == re }
+    it { should == match['abc'] }
+    it { should_not == match['bcd'] }
+  end
 end

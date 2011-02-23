@@ -33,5 +33,10 @@ class Parslet::Atoms::Re < Parslet::Atoms::Base
   def to_s_inner(prec) # :nodoc:
     match.inspect[1..-2]
   end
+
+  def ==(other)
+    return match == other.match if other.instance_of?(self.class)
+    super
+  end
 end
 
