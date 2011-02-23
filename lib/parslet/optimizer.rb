@@ -2,7 +2,6 @@
 require 'parslet/atoms/transform'
 
 class Parslet::Optimizer < Parslet::Atoms::Transform
-  
   def initialize
     super
     
@@ -10,9 +9,14 @@ class Parslet::Optimizer < Parslet::Atoms::Transform
   end
 
   class ReturnFalseVisitor
+    def method_missing(name, *args, &block)
+      return false if name.match(/^visit_.*$/)
+      
+      super
+    end
   end
   
-  class StringSeqVisitor
+  class StringSeqVisitor < ReturnFalseVisitor
     def initialize
       @string = ''
     end
@@ -24,6 +28,10 @@ class Parslet::Optimizer < Parslet::Atoms::Transform
     def visit_str(str)
       @string << str
       true
+    end
+    
+    def visit_entity(name, block)
+      block.call.accept(self)
     end
   end
   
@@ -40,14 +48,14 @@ class Parslet::Optimizer < Parslet::Atoms::Transform
     # Is transformed just strings?
     v = StringSeqVisitor.new
     return v.str if transformed.all? { |e| e.accept(v) }
-    
+
     # Classical result, just create another sequence
     foldr(transformed, &:>>)
   end
     
 private
-  def foldr(ary)
+  def foldr(ary, &block)
     return ary.dup if ary.size == 1
-    ary[1..-1].inject(ary[0])
+    ary[1..-1].inject(ary[0], &block)
   end
 end
