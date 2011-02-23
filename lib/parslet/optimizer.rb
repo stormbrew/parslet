@@ -32,6 +32,7 @@ class Parslet::Optimizer < Parslet::Atoms::Transform
     
     def visit_entity(name, block)
       block.call.accept(self)
+      true
     end
   end
   
@@ -55,7 +56,7 @@ class Parslet::Optimizer < Parslet::Atoms::Transform
     
 private
   def foldr(ary, &block)
-    return ary.dup if ary.size == 1
+    return ary.first if ary.size == 1
     ary[1..-1].inject(ary[0], &block)
   end
 end

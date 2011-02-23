@@ -29,6 +29,15 @@ describe Parslet::Optimizer do
     
     it { should == str('foobar') }
   end
+  context "when applied to a degenerate sequence" do
+    let(:parslet) { Parslet::Atoms::Sequence.new(match['foo']) }
+    
+    it "should not change the parser" do
+      optimize(parslet).should parse('f')
+      optimize(parslet).should parse('o')
+      optimize(parslet).should_not parse('b')
+    end 
+  end
   context "when applied to mixed sequences" do
     let(:parslet) { str('a') >> match['b'] >> str('c').as(:d) }
     subject { parslet }
