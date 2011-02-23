@@ -63,11 +63,10 @@ describe Parslet::Atoms::Transform do
         end
       end
       it "should transform a positive lookahead into a negative lookahead" do
-        apply(
-          # The order of the sequence gets reversed as well...
-          str('foo') >> str('foo').absnt?
-        ).should parse('oof')
+        transformed = apply(str('foo').absnt?)
+        transformed.should == str('oof').prsnt?
       end 
+      
     end
     context "entity" do
       class ModifyAll

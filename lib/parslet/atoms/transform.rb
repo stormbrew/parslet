@@ -52,7 +52,7 @@ class Parslet::Atoms::Transform
   end
   
   def visit_lookahead(positive, parslet)
-    Parslet::Atoms::Lookahead.new(positive, parslet.accept(self))
+    Parslet::Atoms::Lookahead.new(parslet.accept(self), positive)
   end
   
   def visit_entity(name, block)
