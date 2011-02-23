@@ -11,6 +11,9 @@ class Parslet::Atoms::Lookahead < Parslet::Atoms::Base
   def initialize(bound_parslet, positive=true) # :nodoc:
     super()
     
+    raise ArgumentError, "Must be a parslet, but was: #{bound_parslet.inspect}" \
+      unless bound_parslet.respond_to?(:parse)
+    
     # Model positive and negative lookahead by testing this flag.
     @positive = positive
     @bound_parslet = bound_parslet
@@ -38,11 +41,18 @@ class Parslet::Atoms::Lookahead < Parslet::Atoms::Base
   precedence LOOKAHEAD
   def to_s_inner(prec) # :nodoc:
     char = positive ? '&' : '!'
-    
+
     "#{char}#{bound_parslet.to_s(prec)}"
   end
 
   def error_tree # :nodoc:
     bound_parslet.error_tree
+  end
+  
+  def ==(other)
+    return positive==other.positive && bound_parslet==other.bound_parslet \
+      if other.instance_of?(self.class)
+        
+    super
   end
 end
