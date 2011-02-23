@@ -11,11 +11,17 @@ describe Parslet::Parser do
     parser = Class.new(Parslet::Parser)
     parser.root :root_parslet
     
-    it "should have defined a 'root' method, returning the root" do
+    it "should have defined a #root method, returning the root" do
       parser_instance = parser.new
       flexmock(parser_instance).should_receive(:root_parslet => :answer)
       
       parser_instance.root.should == :answer
+    end 
+    it "should have defined an #optimized_root method" do
+      parser_instance = parser.new
+      flexmock(parser_instance).should_receive(:root_parslet => str('foo'))
+      
+      parser_instance.optimized_root.should == str('foo')
     end 
   end
   it "should parse 'foo'" do

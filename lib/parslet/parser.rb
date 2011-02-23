@@ -54,6 +54,10 @@ class Parslet::Parser < Parslet::Atoms::Base
       define_method(:root) do
         self.send(name)
       end
+      define_method(:optimized_root) do
+        optimizer = Parslet::Optimizer.new
+        optimizer.apply(self.send(name))
+      end
     end
   end
   
