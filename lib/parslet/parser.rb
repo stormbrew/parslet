@@ -61,8 +61,8 @@ class Parslet::Parser < Parslet::Atoms::Base
     root
   end
 
-  def apply(source, context) # :nodoc:
-    real_parslet.apply(source, context)
+  def apply(source, context, memoize = false) # :nodoc:
+    real_parslet.apply(source, context, memoize)
   end
   
   def try(source, context) # :nodoc:

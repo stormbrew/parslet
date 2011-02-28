@@ -17,8 +17,8 @@ class Parslet::Atoms::Entity < Parslet::Atoms::Base
     @block = block
   end
 
-  def apply(source, context)
-    real_parslet.apply(source, context)
+  def apply(source, context, memoize = true)
+    real_parslet.apply(source, context, memoize)
   end
 
   def try(source, context) # :nodoc:
