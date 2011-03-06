@@ -56,9 +56,17 @@ class Parslet::Parser < Parslet::Atoms::Base
       end
     end
   end
+
+  def real_parslet
+    root
+  end
+
+  def apply(source, context) # :nodoc:
+    real_parslet.apply(source, context)
+  end
   
   def try(source, context) # :nodoc:
-    root.try(source, context)
+    real_parslet.try(source, context)
   end
   
   def error_tree # :nodoc:

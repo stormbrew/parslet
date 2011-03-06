@@ -20,7 +20,7 @@ describe Parslet do
       
       it "should raise a NotImplementedError" do
         lambda {
-          empty.parslet
+          empty.real_parslet
         }.should raise_error(NotImplementedError)
       end 
     end

@@ -83,6 +83,13 @@ class Parslet::Atoms::Base
     source.pos = old_pos
     return result # is instance of Fail
   end
+
+  # Returns self in the base case, but entity will return the parslet
+  # it actually refers to. Define it for all atoms so that it
+  # can recursively flatten referenced atoms.
+  def real_parslet
+    self
+  end
   
   # Override this in your Atoms::Base subclasses to implement parsing
   # behaviour. 

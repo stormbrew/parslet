@@ -17,14 +17,18 @@ class Parslet::Atoms::Entity < Parslet::Atoms::Base
     @block = block
   end
 
+  def apply(source, context)
+    real_parslet.apply(source, context)
+  end
+
   def try(source, context) # :nodoc:
-    parslet.apply(source, context)
+    real_parslet.try(source, context)
   end
   
-  def parslet
+  def real_parslet
     @parslet ||= @block.call.tap { |p| 
       raise_not_implemented unless p
-    }
+    }.real_parslet
   end
 
   def to_s_inner(prec) # :nodoc:
@@ -32,7 +36,7 @@ class Parslet::Atoms::Entity < Parslet::Atoms::Base
   end
 
   def error_tree # :nodoc:
-    parslet.error_tree
+    real_parslet.error_tree
   end
   
 private 
