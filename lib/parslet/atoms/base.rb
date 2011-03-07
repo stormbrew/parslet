@@ -96,7 +96,7 @@ class Parslet::Atoms::Base
   #
   def try(source, context)
     raise NotImplementedError, \
-      "Atoms::Base doesn't have behaviour, please implement #try(source, context)."
+      "#{self.class}(#{self}) doesn't have behaviour, please implement #try(source, context)."
   end
 
   # Takes a mixed value coming out of a parslet and converts it to a return
@@ -215,6 +215,9 @@ class Parslet::Atoms::Base
   end
   def inspect # :nodoc:
     to_s(OUTER)
+  end
+  def to_s_inner(prec)
+    "#{self.class} UNIMPLEMENTED to_s_inner"
   end
 
   # Cause should return the current best approximation of this parslet
