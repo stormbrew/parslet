@@ -106,6 +106,38 @@ module Parslet
         @rules[name] = Atoms::Entity.new(name, &definition_closure)
       end
     end
+
+    # Define a memoized entity for the parser. Just like 'rule',
+    # but the rule is memoized to improve performance. Careful use of
+    # this is in order, as making everything memoize causes
+    # explosive memory growth and slows down parsing substantially.
+    #
+    # Example:
+    #
+    #   class MyParser
+    #     include Parslet
+    #
+    #     memo :bar { str('bar') }
+    #     rule :twobar do
+    #       bar >> bar
+    #     end
+    #
+    #     root :twobar
+    #   end
+    #
+    def memo(name, &definition)
+      define_method(name) do
+        @rules ||= {}     # <name, rule> memoization
+        return @rules[name] if @rules.has_key?(name)
+        
+        # Capture the self of the parser class along with the definition.
+        definition_closure = proc {
+          self.instance_eval(&definition)
+        }
+        
+        @rules[name] = Atoms::Memo.new(name, &definition_closure)
+      end
+    end
   end
 
   # Allows for delayed construction of #match. See also Parslet.match.
